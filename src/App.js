@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SeriesInCard from './SeriesInCard.js';
+import { Container } from 'aphrodite-react';
 
-class App extends Component {
+export default class App extends Component {
+
+  constructor(props) {
+      super(props);
+
+      this.state = {
+        series: []
+      };
+    }
+
+    componentDidMount() {
+      const BASE_URL = 'http://api.tvmaze.com/';
+
+      fetch(`${BASE_URL}/search/shows?q=star wars`)
+        .then(res => res.json())
+        .then(data => this.setState({ series: data }));
+    };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+      <Container fluid>
+        <header>
+          <h1>Code Challenge Ingresse</h1>
+
         </header>
-      </div>
+        <div>
+          {this.state.series.map( (serie) =>
+            <SeriesInCard {...serie} key={serie.show.id} />
+          )}
+        </div>
+      </Container>
     );
   }
 }
 
-export default App;
